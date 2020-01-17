@@ -1,0 +1,3 @@
+[submodule "src/SafeInt"]
+	path = src/SafeInt
+	url = https://github.com/dcleblanc/SafeInt
