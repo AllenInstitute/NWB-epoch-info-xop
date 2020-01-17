@@ -1,3 +1,6 @@
 [submodule "src/SafeInt"]
 	path = src/SafeInt
 	url = https://github.com/dcleblanc/SafeInt
+[submodule "xop_generator/cmake/CreateLaunchers"]
+	path = xop_generator/cmake/CreateLaunchers
+	url = https://github.com/caseymcc/CreateLaunchers.git
