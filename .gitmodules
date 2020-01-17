@@ -4,3 +4,6 @@
 [submodule "xop_generator/cmake/CreateLaunchers"]
 	path = xop_generator/cmake/CreateLaunchers
 	url = https://github.com/caseymcc/CreateLaunchers.git
+[submodule "xop_generator/XOP-function-stub-generator"]
+	path = xop_generator/XOP-function-stub-generator
+	url = https://github.com/byte-physics/XOP-function-stub-generator/
