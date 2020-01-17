@@ -1,0 +1,1 @@
+    "#include ""%%XOPNAME%%_xopWinCustom.rc""\r\n"

@@ -1,0 +1,2 @@
+	"%%OPERATIONNAME%%\0",
+	utilOp | XOPOp | compilableOp | threadSafeOp,

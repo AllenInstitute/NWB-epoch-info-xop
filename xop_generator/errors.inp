@@ -1,0 +1,6 @@
+ERR_ASSERT
+ASSERTion encountered.
+ERR_PARSE
+Error when parsing string to JSON
+ERR_CONVERT
+Can not convert value to requested type.

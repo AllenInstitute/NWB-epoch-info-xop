@@ -1,0 +1,5 @@
+# Operations
+
+MIESNWB2_WriteCompound /Z[=number:ZIn] /S=wave:offsetWave /C=wave:sizeWave /REF=wave:tsRefWave /LOC=string:compPath string:fullFileName
+
+MIESNWB2_ReadCompound /Z[=number:ZIn] /S=wave:offsetWave /C=wave:sizeWave /REF=wave:tsRefWave /LOC=string:compPath string:fullFileName

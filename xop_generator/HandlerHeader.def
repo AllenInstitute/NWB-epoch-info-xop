@@ -1,0 +1,22 @@
+#pragma once
+
+#include "Operations.h"
+#include "functions.h"
+
+class Handler
+{
+public:
+  // Singleton access
+  static Handler &Instance();
+
+  // Operations
+%%OPERATIONS%%
+
+  // Functions
+%%FUNCTIONS%%
+
+private:
+  Handler() = default;
+};
+
+Handler &XOPHandler();

@@ -1,0 +1,2 @@
+  if(result = Register%%OPERATIONNAME%%())
+  return result;

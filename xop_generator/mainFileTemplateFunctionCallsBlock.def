@@ -1,0 +1,9 @@
+extern "C" int %%FUNCTIONNAME%%(%%FUNCTIONNAME%%Params *p)
+{
+  BEGIN_OUTER_CATCH
+
+  LockGuard lock(mutex);
+  XOPHandler().%%FUNCTIONNAME%%(p);
+
+  END_OUTER_CATCH
+}

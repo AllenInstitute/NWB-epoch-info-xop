@@ -1,0 +1,30 @@
+%%HEADERINCLUDE%%
+#include "Operations.h"
+#include "Helpers.h"
+#include "xop_errors.h"
+#include "CustomExceptions.h"
+#include <vector>
+#include <algorithm>
+#include <type_traits>
+#include <cstdint>
+
+namespace
+{
+using namespace fmt::literals;
+} // namespace
+
+Handler &XOPHandler()
+{
+  return Handler::Instance();
+}
+
+Handler &Handler::Instance()
+{
+  static Handler h;
+
+  return h;
+}
+
+%%FUNCTIONS%%
+
+%%OPFUNCTIONS%%
