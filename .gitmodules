@@ -7,3 +7,6 @@
 [submodule "xop_generator/XOP-function-stub-generator"]
 	path = xop_generator/XOP-function-stub-generator
 	url = https://github.com/byte-physics/XOP-function-stub-generator/
+[submodule "xop_generator/fmt"]
+	path = xop_generator/fmt
+	url = https://github.com/fmtlib/fmt
