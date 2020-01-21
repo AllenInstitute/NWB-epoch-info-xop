@@ -200,9 +200,9 @@ ELSEIF(WIN32)
     foreach(flag_var
         CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
         CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
-      if(${flag_var} MATCHES "/MD")
-        string(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
-      endif(${flag_var} MATCHES "/MD")
+      if(${flag_var} MATCHES "/MT")
+        string(REGEX REPLACE "/MT" "/MD" ${flag_var} "${${flag_var}}")
+      endif(${flag_var} MATCHES "/MT")
     endforeach(flag_var)
 
     # Use parallel builds
@@ -212,7 +212,17 @@ ELSEIF(WIN32)
   ENDIF()
 ENDIF()
 
-TARGET_LINK_LIBRARIES(${libname} ${CMAKE_SOURCE_DIR}/../hdf5/HDF5-1.10.6-win64/lib/hdf5.lib ${CMAKE_SOURCE_DIR}/../hdf5/HDF5-1.10.6-win64/lib/hdf5_hl.lib)
+TARGET_LINK_LIBRARIES(${libname} optimized ${CMAKE_SOURCE_DIR}/../hdf5/HDF5-1.10.6-win64/lib/libszip.lib)
+TARGET_LINK_LIBRARIES(${libname} optimized ${CMAKE_SOURCE_DIR}/../hdf5/HDF5-1.10.6-win64/lib/libzlib.lib)
+TARGET_LINK_LIBRARIES(${libname} optimized ${CMAKE_SOURCE_DIR}/../hdf5/HDF5-1.10.6-win64/lib/libhdf5.lib)
+TARGET_LINK_LIBRARIES(${libname} optimized ${CMAKE_SOURCE_DIR}/../hdf5/HDF5-1.10.6-win64/lib/libhdf5_cpp.lib)
+TARGET_LINK_LIBRARIES(${libname} optimized ${CMAKE_SOURCE_DIR}/../hdf5/HDF5-1.10.6-win64/lib/libhdf5_hl_cpp.lib)
+
+TARGET_LINK_LIBRARIES(${libname} debug ${CMAKE_SOURCE_DIR}/../hdf5/HDF5-1.10.6-win64/lib/libszip_D.lib)
+TARGET_LINK_LIBRARIES(${libname} debug ${CMAKE_SOURCE_DIR}/../hdf5/HDF5-1.10.6-win64/lib/libzlib_D.lib)
+TARGET_LINK_LIBRARIES(${libname} debug ${CMAKE_SOURCE_DIR}/../hdf5/HDF5-1.10.6-win64/lib/libhdf5_D.lib)
+TARGET_LINK_LIBRARIES(${libname} debug ${CMAKE_SOURCE_DIR}/../hdf5/HDF5-1.10.6-win64/lib/libhdf5_cpp_D.lib)
+TARGET_LINK_LIBRARIES(${libname} debug ${CMAKE_SOURCE_DIR}/../hdf5/HDF5-1.10.6-win64/lib/libhdf5_hl_cpp_D.lib)
 
 ADD_SUBDIRECTORY(fmt)
 
