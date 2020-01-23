@@ -2,4 +2,4 @@
 
 MIESNWB2_WriteCompound /Z[=number:ZIn] /Q[=number:QIn] /S=wave:offsetWave /C=wave:sizeWave /REF=wave:tsRefWave /LOC=string:compPath string:fullFileName
 
-MIESNWB2_ReadCompound /Z[=number:ZIn] /Q[=number:QIn] /S=DataFolderAndName:{offsetWave, real} /C=DataFolderAndName:{sizeWave, real} /REF=DataFolderAndName:{tsRefWave, text} /LOC=string:compPath string:fullFileName
+MIESNWB2_ReadCompound /Z[=number:ZIn] /Q[=number:QIn] /FREE /S=DataFolderAndName:{offsetWave, real} /C=DataFolderAndName:{sizeWave, real} /REF=DataFolderAndName:{tsRefWave, text} /LOC=string:compPath string:fullFileName

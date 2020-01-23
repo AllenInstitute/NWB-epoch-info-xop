@@ -373,7 +373,7 @@ template <typename T> bool ReadQFlagImpl(T *params, std::true_type /*unused*/) {
 /// or overwrite
 /// @param[in] setWaveContents function that sets the contents of the final wave
 void HandleDestWave(int FlagParamsSet, const DataFolderAndName &dfAndName,
-                    int calledFromFunction, std::vector<CountInt> dims,
+                    const int freeFlagEncountered, std::vector<CountInt> dims,
                     const std::function<void(waveHndl)> &checkWaveProperties,
                     const std::function<int(waveHndl)> &typeGetter,
                     const std::function<void(waveHndl)> &setWaveContents);

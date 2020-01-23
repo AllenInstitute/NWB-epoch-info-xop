@@ -64,7 +64,7 @@ static int RegisterMIESNWB2_ReadCompound(void) {
   // NOTE: If you change this template, you must change the
   // MIESNWB2_ReadCompoundRuntimeParams structure as well.
   cmdTemplate =
-      "MIESNWB2_ReadCompound /Z[=number:ZIn] /Q[=number:QIn] "
+      "MIESNWB2_ReadCompound /Z[=number:ZIn] /Q[=number:QIn] /FREE "
       "/S=DataFolderAndName:{offsetWave, real} /C=DataFolderAndName:{sizeWave, "
       "real} /REF=DataFolderAndName:{tsRefWave, text} /LOC=string:compPath "
       "string:fullFileName";

@@ -214,8 +214,9 @@ void Handler::MIESNWB2_ReadCompound(MIESNWB2_ReadCompoundRuntimeParamsPtr p) {
     dataSet.read(compoundData.data(), compType);
 
     for (const auto &dp : compoundData) {
-        // dereferencing changes dset internally to a H5::Object, so we need a fresh one to reapply dereference
-        H5::DataSet dset = H5::DataSet();
+      // dereferencing changes dset internally to a H5::Object, so we need a
+      // fresh one to reapply dereference
+      H5::DataSet dset = H5::DataSet();
       dset.dereference(file, &dp.ref);
       niceRefs.push_back(dset.getObjName());
       offsets.push_back(dp.offset);
@@ -244,7 +245,7 @@ void Handler::MIESNWB2_ReadCompound(MIESNWB2_ReadCompoundRuntimeParamsPtr p) {
       StringVectorToTextWave(niceRefs, w);
     };
 
-    HandleDestWave(p->REFFlagParamsSet[0], p->tsRefWave, p->calledFromFunction,
+    HandleDestWave(p->REFFlagParamsSet[0], p->tsRefWave, p->FREEFlagEncountered,
                    dimCnt, checkWaveProperties, typeGetter, setWaveContents);
   }
   {
@@ -261,7 +262,7 @@ void Handler::MIESNWB2_ReadCompound(MIESNWB2_ReadCompoundRuntimeParamsPtr p) {
       std::memcpy(WaveData(w), offsets.data(), numPoints * sizeof(int));
     };
 
-    HandleDestWave(p->SFlagParamsSet[0], p->offsetWave, p->calledFromFunction,
+    HandleDestWave(p->SFlagParamsSet[0], p->offsetWave, p->FREEFlagEncountered,
                    dimCnt, checkWaveProperties, typeGetter, setWaveContents);
   }
   {
@@ -278,7 +279,7 @@ void Handler::MIESNWB2_ReadCompound(MIESNWB2_ReadCompoundRuntimeParamsPtr p) {
       std::memcpy(WaveData(w), sizes.data(), numPoints * sizeof(int));
     };
 
-    HandleDestWave(p->CFlagParamsSet[0], p->sizeWave, p->calledFromFunction,
+    HandleDestWave(p->CFlagParamsSet[0], p->sizeWave, p->FREEFlagEncountered,
                    dimCnt, checkWaveProperties, typeGetter, setWaveContents);
   }
 }

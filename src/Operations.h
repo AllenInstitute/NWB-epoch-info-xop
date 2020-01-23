@@ -61,8 +61,8 @@ typedef struct MIESNWB2_WriteCompoundRuntimeParams
 #pragma pack() // Reset structure alignment to default.
 
 // Operation template: MIESNWB2_ReadCompound /Z[=number:ZIn] /Q[=number:QIn]
-// /S=DataFolderAndName:{offsetWave, real} /C=DataFolderAndName:{sizeWave, real}
-// /REF=DataFolderAndName:{tsRefWave, text} /LOC=string:compPath
+// /FREE /S=DataFolderAndName:{offsetWave, real} /C=DataFolderAndName:{sizeWave,
+// real} /REF=DataFolderAndName:{tsRefWave, text} /LOC=string:compPath
 // string:fullFileName
 
 // Runtime param structure for MIESNWB2_ReadCompound operation.
@@ -79,6 +79,10 @@ struct MIESNWB2_ReadCompoundRuntimeParams {
   int QFlagEncountered;
   double QIn; // Optional parameter.
   int QFlagParamsSet[1];
+
+  // Parameters for /FREE flag group.
+  int FREEFlagEncountered;
+  // There are no fields for this group because it has no parameters.
 
   // Parameters for /S flag group.
   int SFlagEncountered;

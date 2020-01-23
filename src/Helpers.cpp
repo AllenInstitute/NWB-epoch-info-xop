@@ -502,7 +502,7 @@ void SetOperationReturn(const std::string &name, double value) {
 }
 
 void HandleDestWave(int FlagParamsSet, const DataFolderAndName &dfAndName,
-                    int calledFromFunction, std::vector<CountInt> dims,
+                    const int freeFlagEncountered, std::vector<CountInt> dims,
                     const std::function<void(waveHndl)> &checkWaveProperties,
                     const std::function<int(waveHndl)> &typeGetter,
                     const std::function<void(waveHndl)> &setWaveContents) {
@@ -520,19 +520,20 @@ void HandleDestWave(int FlagParamsSet, const DataFolderAndName &dfAndName,
   int waveOptions = optOverwrite;
   int type = TEXT_WAVE_TYPE;
 
-  // recover type of preexisting wave if it does
-  err = GetOperationDestWave(
-      dfAndName.dfH, static_cast<const char *>(dfAndName.name), FlagParamsSet,
-      optExists, dims.data(), type, &destWaveH, nullptr);
-  if (!((err == 0) || (err == NOWAV))) {
-    throw IgorException(err, "Error retrieving wave from operation.");
-  }
-  if (err == 0) {
-    checkWaveProperties(destWaveH);
-  } else if (calledFromFunction) {
+  if (freeFlagEncountered) {
     waveOptions = optNewFree;
+  } else {
+    // recover type of preexisting wave if it does
+    err = GetOperationDestWave(
+        dfAndName.dfH, static_cast<const char *>(dfAndName.name), FlagParamsSet,
+        optExists, dims.data(), type, &destWaveH, nullptr);
+    if (!((err == 0) || (err == NOWAV))) {
+      throw IgorException(err, "Error retrieving wave from operation.");
+    }
+    if (err == 0) {
+      checkWaveProperties(destWaveH);
+    }
   }
-
   type = typeGetter(destWaveH);
 
   // change/create wave
