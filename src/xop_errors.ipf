@@ -10,8 +10,8 @@ Constant MIES-NWB2-COMPOUND-XOP_CPP_EXCEPTION = 10003
 // ASSERTion encountered.
 Constant MIES-NWB2-COMPOUND-XOP_ERR_ASSERT = 10004
 
-// Error when parsing input
-Constant MIES-NWB2-COMPOUND-XOP_ERR_PARSE = 10005
+// Error when parsing HDF5 file
+Constant MIES-NWB2-COMPOUND-XOP_ERR_HDF5 = 10005
 
 // Can not convert value to requested type.
 Constant MIES-NWB2-COMPOUND-XOP_ERR_CONVERT = 10006

@@ -7,7 +7,7 @@
 #define UNHANDLED_CPP_EXCEPTION  2 + FIRST_XOP_ERR
 #define CPP_EXCEPTION            3 + FIRST_XOP_ERR
 #define ERR_ASSERT               4 + FIRST_XOP_ERR
-#define ERR_PARSE                5 + FIRST_XOP_ERR
+#define ERR_HDF5                 5 + FIRST_XOP_ERR
 #define ERR_CONVERT              6 + FIRST_XOP_ERR
 #define ERR_INVALID_TYPE         7 + FIRST_XOP_ERR
 #define ERR_FLAGPARAMS           8 + FIRST_XOP_ERR

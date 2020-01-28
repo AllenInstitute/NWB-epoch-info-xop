@@ -3,7 +3,8 @@
 #include "Operations.h"
 #include "functions.h"
 
-class Handler {
+class Handler
+{
 public:
   // Singleton access
   static Handler &Instance();
@@ -12,14 +13,14 @@ public:
   void SetQuietMode(bool quietMode);
 
   // Operations
-  void MIESNWB2_WriteCompound(MIESNWB2_WriteCompoundRuntimeParamsPtr p);
+  void IPNWB_WriteCompound(IPNWB_WriteCompoundRuntimeParamsPtr p);
 
-  void MIESNWB2_ReadCompound(MIESNWB2_ReadCompoundRuntimeParamsPtr p);
+  void IPNWB_ReadCompound(IPNWB_ReadCompoundRuntimeParamsPtr p);
 
   // Functions
 
 private:
-  Handler() = default;
+  Handler()        = default;
   bool m_quietMode = false;
 };
 

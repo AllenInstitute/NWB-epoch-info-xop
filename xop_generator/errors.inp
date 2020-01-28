@@ -1,7 +1,7 @@
 ERR_ASSERT
 ASSERTion encountered.
-ERR_PARSE
-Error when parsing input
+ERR_HDF5
+Error when parsing HDF5 file
 ERR_CONVERT
 Can not convert value to requested type.
 ERR_INVALID_TYPE

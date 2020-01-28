@@ -1,15 +1,16 @@
 #include "mies-nwb2-compound-XOP_xop.h"
 #include "mies-nwb2-compound-XOP_handler.h"
 
-#include "CustomExceptions.h"
-#include "Helpers.h"
 #include "Operations.h"
 #include "functions.h"
+#include "CustomExceptions.h"
+#include "Helpers.h"
 #include "xop_errors.h"
 
 #include <mutex>
 
-namespace {
+namespace
+{
 using LockGuard = std::lock_guard<std::recursive_mutex>;
 std::recursive_mutex mutex;
 } // namespace
@@ -18,72 +19,65 @@ std::recursive_mutex mutex;
 
 // OPERATIONS
 
-extern "C" int
-ExecuteMIESNWB2_WriteCompound(MIESNWB2_WriteCompoundRuntimeParamsPtr p) {
+extern "C" int ExecuteIPNWB_WriteCompound(IPNWB_WriteCompoundRuntimeParamsPtr p)
+{
   BEGIN_OUTER_CATCH
 
   LockGuard lock(mutex);
-  XOPHandler().MIESNWB2_WriteCompound(p);
+  XOPHandler().IPNWB_WriteCompound(p);
 
   END_OUTER_CATCH
 }
 
-extern "C" int
-ExecuteMIESNWB2_ReadCompound(MIESNWB2_ReadCompoundRuntimeParamsPtr p) {
+extern "C" int ExecuteIPNWB_ReadCompound(IPNWB_ReadCompoundRuntimeParamsPtr p)
+{
   BEGIN_OUTER_CATCH
 
   LockGuard lock(mutex);
-  XOPHandler().MIESNWB2_ReadCompound(p);
+  XOPHandler().IPNWB_ReadCompound(p);
 
   END_OUTER_CATCH
 }
 
-static int RegisterMIESNWB2_WriteCompound(void) {
+static int RegisterIPNWB_WriteCompound(void)
+{
   const char *cmdTemplate;
   const char *runtimeNumVarList;
   const char *runtimeStrVarList;
 
-  // NOTE: If you change this template, you must change the
-  // MIESNWB2_WriteCompoundRuntimeParams structure as well.
-  cmdTemplate = "MIESNWB2_WriteCompound /Z[=number:ZIn] /Q[=number:QIn] "
-                "/S=wave:offsetWave /C=wave:sizeWave /REF=wave:tsRefWave "
-                "/LOC=string:compPath string:fullFileName";
+  // NOTE: If you change this template, you must change the IPNWB_WriteCompoundRuntimeParams structure as well.
+  cmdTemplate = "IPNWB_WriteCompound /Z[=number:ZIn] /Q[=number:QIn] /S=wave:offsetWave /C=wave:sizeWave "
+                "/REF=wave:tsRefWave /LOC=string:compPath string:fullFileName";
   runtimeNumVarList = "";
   runtimeStrVarList = "";
-  return RegisterOperation(cmdTemplate, runtimeNumVarList, runtimeStrVarList,
-                           sizeof(MIESNWB2_WriteCompoundRuntimeParams),
-                           (void *)ExecuteMIESNWB2_WriteCompound,
-                           kOperationIsThreadSafe);
+  return RegisterOperation(cmdTemplate, runtimeNumVarList, runtimeStrVarList, sizeof(IPNWB_WriteCompoundRuntimeParams),
+                           (void *) ExecuteIPNWB_WriteCompound, kOperationIsThreadSafe);
 }
 
-static int RegisterMIESNWB2_ReadCompound(void) {
+static int RegisterIPNWB_ReadCompound(void)
+{
   const char *cmdTemplate;
   const char *runtimeNumVarList;
   const char *runtimeStrVarList;
 
-  // NOTE: If you change this template, you must change the
-  // MIESNWB2_ReadCompoundRuntimeParams structure as well.
-  cmdTemplate =
-      "MIESNWB2_ReadCompound /Z[=number:ZIn] /Q[=number:QIn] /FREE "
-      "/S=DataFolderAndName:{offsetWave, real} /C=DataFolderAndName:{sizeWave, "
-      "real} /REF=DataFolderAndName:{tsRefWave, text} /LOC=string:compPath "
-      "string:fullFileName";
+  // NOTE: If you change this template, you must change the IPNWB_ReadCompoundRuntimeParams structure as well.
+  cmdTemplate = "IPNWB_ReadCompound /Z[=number:ZIn] /Q[=number:QIn] /FREE /S=DataFolderAndName:{offsetWave, real} "
+                "/C=DataFolderAndName:{sizeWave, real} /REF=DataFolderAndName:{tsRefWave, text} /LOC=string:compPath "
+                "string:fullFileName";
   runtimeNumVarList = "";
   runtimeStrVarList = "";
-  return RegisterOperation(cmdTemplate, runtimeNumVarList, runtimeStrVarList,
-                           sizeof(MIESNWB2_ReadCompoundRuntimeParams),
-                           (void *)ExecuteMIESNWB2_ReadCompound,
-                           kOperationIsThreadSafe);
+  return RegisterOperation(cmdTemplate, runtimeNumVarList, runtimeStrVarList, sizeof(IPNWB_ReadCompoundRuntimeParams),
+                           (void *) ExecuteIPNWB_ReadCompound, kOperationIsThreadSafe);
 }
 
 static int RegisterOperations(void) // Register any operations with Igor.
 {
   int result;
 
-  if (result = RegisterMIESNWB2_WriteCompound())
+  if(result = RegisterIPNWB_WriteCompound())
     return result;
 
-  if (result = RegisterMIESNWB2_ReadCompound())
+  if(result = RegisterIPNWB_ReadCompound())
     return result;
 
   return 0;
@@ -95,10 +89,12 @@ static int RegisterOperations(void) // Register any operations with Igor.
   after the INIT message.
 */
 
-extern "C" void XOPEntry(void) {
+extern "C" void XOPEntry(void)
+{
   XOPIORecResult result = 0;
 
-  switch (GetXOPMessage()) {
+  switch(GetXOPMessage())
+  {
   case FUNCADDRS:
     result = RegisterFunction();
     break;
@@ -117,9 +113,8 @@ extern "C" void XOPEntry(void) {
   the ioRecHandle to the address to be called for future messages.
 */
 
-HOST_IMPORT int
-XOPMain(IORecHandle ioRecHandle) // The use of XOPMain rather than main means
-                                 // this XOP requires Igor Pro 6.20 or later
+HOST_IMPORT int XOPMain(IORecHandle ioRecHandle) // The use of XOPMain rather than main means
+                                                 // this XOP requires Igor Pro 6.20 or later
 {
   int result;
 
@@ -127,16 +122,17 @@ XOPMain(IORecHandle ioRecHandle) // The use of XOPMain rather than main means
   SetXOPEntry(XOPEntry); // Set entry point for future calls
 
 #if XOP_TOOLKIT_VERSION >= 800
-  if (igorVersion < 800)
+  if(igorVersion < 800)
 #else
-  if (igorVersion < 700)
+  if(igorVersion < 700)
 #endif
   {
     SetXOPResult(OLD_IGOR);
     return EXIT_FAILURE;
   }
 
-  if (result = RegisterOperations()) {
+  if(result = RegisterOperations())
+  {
     SetXOPResult(result);
     return EXIT_FAILURE;
   }

@@ -17,7 +17,7 @@ BEGIN
   "A C++ exception occured.\0",                                                                        // CPP_EXCEPTION
 
   "ASSERTion encountered.\0",                                                                          // ERR_ASSERT
-  "Error when parsing input\0",                                                                        // ERR_PARSE
+  "Error when parsing HDF5 file\0",                                                                    // ERR_HDF5
   "Can not convert value to requested type.\0",                                                        // ERR_CONVERT
   "Invalid type specified.\0",                                                                         // ERR_INVALID_TYPE
   "Parameters missing in operation call\0",                                                            // ERR_FLAGPARAMS
@@ -37,10 +37,10 @@ END
 
 1100 XOPC
 BEGIN
-	"MIESNWB2_WriteCompound\0",
+	"IPNWB_WriteCompound\0",
 	utilOp | XOPOp | compilableOp | threadSafeOp,
 
-	"MIESNWB2_ReadCompound\0",
+	"IPNWB_ReadCompound\0",
 	utilOp | XOPOp | compilableOp | threadSafeOp,
 
   "\0"

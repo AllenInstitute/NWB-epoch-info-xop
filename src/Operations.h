@@ -2,13 +2,13 @@
 
 #include <XOPStandardHeaders.h> // Include ANSI headers, Mac headers, IgorXOP.h, XOP.h and XOPSupport.h
 
-// Operation template: MIESNWB2_WriteCompound /Z[=number:ZIn] /Q[=number:QIn]
-// /S=wave:offsetWave /C=wave:sizeWave /REF=wave:tsRefWave /LOC=string:compPath
-// string:fullFileName
+// Operation template: IPNWB_WriteCompound /Z[=number:ZIn] /Q[=number:QIn] /S=wave:offsetWave /C=wave:sizeWave
+// /REF=wave:tsRefWave /LOC=string:compPath string:fullFileName
 
-// Runtime param structure for MIESNWB2_WriteCompound operation.
+// Runtime param structure for IPNWB_WriteCompound operation.
 #pragma pack(2) // All structures passed to Igor are two-byte aligned.
-struct MIESNWB2_WriteCompoundRuntimeParams {
+struct IPNWB_WriteCompoundRuntimeParams
+{
   // Flag parameters.
 
   // Parameters for /Z flag group.
@@ -49,25 +49,22 @@ struct MIESNWB2_WriteCompoundRuntimeParams {
   int fullFileNameParamsSet[1];
 
   // These are postamble fields that Igor sets.
-  int calledFromFunction; // 1 if called from a user function, 0 otherwise.
-  int calledFromMacro;    // 1 if called from a macro, 0 otherwise.
-  UserFunctionThreadInfoPtr
-      tp; // If not null, we are running from a ThreadSafe function.
+  int calledFromFunction;       // 1 if called from a user function, 0 otherwise.
+  int calledFromMacro;          // 1 if called from a macro, 0 otherwise.
+  UserFunctionThreadInfoPtr tp; // If not null, we are running from a ThreadSafe function.
 };
-typedef struct MIESNWB2_WriteCompoundRuntimeParams
-    MIESNWB2_WriteCompoundRuntimeParams;
-typedef struct MIESNWB2_WriteCompoundRuntimeParams
-    *MIESNWB2_WriteCompoundRuntimeParamsPtr;
+typedef struct IPNWB_WriteCompoundRuntimeParams IPNWB_WriteCompoundRuntimeParams;
+typedef struct IPNWB_WriteCompoundRuntimeParams *IPNWB_WriteCompoundRuntimeParamsPtr;
 #pragma pack() // Reset structure alignment to default.
 
-// Operation template: MIESNWB2_ReadCompound /Z[=number:ZIn] /Q[=number:QIn]
-// /FREE /S=DataFolderAndName:{offsetWave, real} /C=DataFolderAndName:{sizeWave,
-// real} /REF=DataFolderAndName:{tsRefWave, text} /LOC=string:compPath
+// Operation template: IPNWB_ReadCompound /Z[=number:ZIn] /Q[=number:QIn] /FREE /S=DataFolderAndName:{offsetWave, real}
+// /C=DataFolderAndName:{sizeWave, real} /REF=DataFolderAndName:{tsRefWave, text} /LOC=string:compPath
 // string:fullFileName
 
-// Runtime param structure for MIESNWB2_ReadCompound operation.
+// Runtime param structure for IPNWB_ReadCompound operation.
 #pragma pack(2) // All structures passed to Igor are two-byte aligned.
-struct MIESNWB2_ReadCompoundRuntimeParams {
+struct IPNWB_ReadCompoundRuntimeParams
+{
   // Flag parameters.
 
   // Parameters for /Z flag group.
@@ -112,13 +109,10 @@ struct MIESNWB2_ReadCompoundRuntimeParams {
   int fullFileNameParamsSet[1];
 
   // These are postamble fields that Igor sets.
-  int calledFromFunction; // 1 if called from a user function, 0 otherwise.
-  int calledFromMacro;    // 1 if called from a macro, 0 otherwise.
-  UserFunctionThreadInfoPtr
-      tp; // If not null, we are running from a ThreadSafe function.
+  int calledFromFunction;       // 1 if called from a user function, 0 otherwise.
+  int calledFromMacro;          // 1 if called from a macro, 0 otherwise.
+  UserFunctionThreadInfoPtr tp; // If not null, we are running from a ThreadSafe function.
 };
-typedef struct MIESNWB2_ReadCompoundRuntimeParams
-    MIESNWB2_ReadCompoundRuntimeParams;
-typedef struct MIESNWB2_ReadCompoundRuntimeParams
-    *MIESNWB2_ReadCompoundRuntimeParamsPtr;
+typedef struct IPNWB_ReadCompoundRuntimeParams IPNWB_ReadCompoundRuntimeParams;
+typedef struct IPNWB_ReadCompoundRuntimeParams *IPNWB_ReadCompoundRuntimeParamsPtr;
 #pragma pack() // Reset structure alignment to default.

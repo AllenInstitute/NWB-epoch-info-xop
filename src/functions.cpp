@@ -2,13 +2,14 @@
 #include "functions.h"
 #include "XOPStandardHeaders.h" // Include ANSI headers, Mac headers, IgorXOP.h, XOP.h and XOPSupport.h
 
-XOPIORecResult RegisterFunction() {
+XOPIORecResult RegisterFunction()
+{
   /*  NOTE:
     Some XOPs should return a result of NIL in response to the FUNCADDRS
     message. See XOP manual "Restrictions on Direct XFUNCs" section.
   */
 
-  XOPIORecParam funcIndex = GetXOPItem(0); /* which function invoked ? */
+  XOPIORecParam funcIndex    = GetXOPItem(0); /* which function invoked ? */
   XOPIORecResult returnValue = NIL;
 
   // switch (funcIndex)

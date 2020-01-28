@@ -3,7 +3,8 @@
 #include <exception>
 #include <string>
 
-class IgorException : public std::exception {
+class IgorException : public std::exception
+{
 public:
   /// Constructors
   // Mark default constructor as deprecated

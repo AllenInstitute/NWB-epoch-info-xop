@@ -4,7 +4,8 @@
 #include <cstdint>
 #include <utility>
 
-namespace {
+namespace
+{
 
 static_assert((NT_I8 | NT_UNSIGNED) == NT_UI8, "invalid definition");
 static_assert((NT_I16 | NT_UNSIGNED) == NT_UI16, "invalid definition");
@@ -21,12 +22,15 @@ static_assert((NT_I64 | NT_UNSIGNED) == NT_UI64, "invalid definition");
 ///
 /// @param str C++ string
 /// @return Igor string handle with the content of the C++ string
-Handle GetHandleFromString(const std::string &str) {
+Handle GetHandleFromString(const std::string &str)
+{
   Handle h;
-  if (!(h = WMNewHandle(To<BCInt>(str.size())))) {
+  if(!(h = WMNewHandle(To<BCInt>(str.size()))))
+  {
     return nullptr;
   }
-  if (PutCStringInHandle(str.c_str(), h)) {
+  if(PutCStringInHandle(str.c_str(), h))
+  {
     return nullptr;
   }
   return h;
@@ -39,9 +43,11 @@ Handle GetHandleFromString(const std::string &str) {
 ///
 /// @param strHandle Igor string handle
 /// @return string with the content of the Igor string Handle
-std::string GetStringFromHandle(Handle strHandle) {
+std::string GetStringFromHandle(Handle strHandle)
+{
   // Check for special case of null handle.
-  if (strHandle == nullptr) {
+  if(strHandle == nullptr)
+  {
     return std::string();
   }
 
@@ -56,25 +62,28 @@ std::string GetStringFromHandle(Handle strHandle) {
 ///
 /// @param strHandle Igor string handle
 /// @return string with the content of the Igor string Handle
-std::string GetStringFromHandleWithDispose(Handle strHandle) {
+std::string GetStringFromHandleWithDispose(Handle strHandle)
+{
   const auto str = GetStringFromHandle(strHandle);
   WMDisposeHandle(strHandle);
 
   return str;
 }
 
-void OutputToHistory(std::string str,
-                     OutputMode mode /*= OutputMode::Normal*/) {
-  if (str.empty()) {
+void OutputToHistory(std::string str, OutputMode mode /*= OutputMode::Normal*/)
+{
+  if(str.empty())
+  {
     return;
   }
 
   XOPNotice2(str.append(CR_STR).c_str(), mode == OutputMode::Normal ? 0x1 : 0);
 }
 
-void OutputToHistory(const char *c_str,
-                     OutputMode mode /*= OutputMode::Normal*/) {
-  if (c_str == nullptr || *c_str == '\0') {
+void OutputToHistory(const char *c_str, OutputMode mode /*= OutputMode::Normal*/)
+{
+  if(c_str == nullptr || *c_str == '\0')
+  {
     return;
   }
 
@@ -84,18 +93,23 @@ void OutputToHistory(const char *c_str,
 }
 
 template <>
-float ConvertFromDouble(double val, const std::string & /* errorMsg  */) {
+float ConvertFromDouble(double val, const std::string & /* errorMsg  */)
+{
   return static_cast<float>(val);
 }
 
 template <>
-double ConvertFromDouble(double val, const std::string & /* errorMsg  */) {
+double ConvertFromDouble(double val, const std::string & /* errorMsg  */)
+{
   return val;
 }
 
-template <> bool ConvertFromDouble(double val, const std::string &errorMsg) {
+template <>
+bool ConvertFromDouble(double val, const std::string &errorMsg)
+{
   // If value is NaN or inf, return an appropriate error.
-  if (std::isnan(val) || std::isinf(val)) {
+  if(std::isnan(val) || std::isinf(val))
+  {
     throw IgorException(kDoesNotSupportNaNorINF, errorMsg);
   }
 
@@ -105,97 +119,119 @@ template <> bool ConvertFromDouble(double val, const std::string &errorMsg) {
 }
 
 template <>
-double ParseString<double>(const std::string &str,
-                           const std::string &errorMsg) {
+double ParseString<double>(const std::string &str, const std::string &errorMsg)
+{
   size_t pos = 0;
-  auto val = std::numeric_limits<double>::quiet_NaN();
+  auto val   = std::numeric_limits<double>::quiet_NaN();
 
-  try {
+  try
+  {
     val = std::stod(str, &pos);
-  } catch (std::exception &) {
+  }
+  catch(std::exception &)
+  {
     throw IgorException(ERR_CONVERT, errorMsg);
   }
-  if (pos != str.size()) {
+  if(pos != str.size())
+  {
     throw IgorException(ERR_CONVERT, errorMsg);
   }
   return val;
 }
 
 template <>
-float ParseString<float>(const std::string &str, const std::string &errorMsg) {
+float ParseString<float>(const std::string &str, const std::string &errorMsg)
+{
   size_t pos = 0;
-  auto val = std::numeric_limits<float>::quiet_NaN();
+  auto val   = std::numeric_limits<float>::quiet_NaN();
 
-  try {
+  try
+  {
     val = std::stof(str, &pos);
-  } catch (std::exception &) {
+  }
+  catch(std::exception &)
+  {
     throw IgorException(ERR_CONVERT, errorMsg);
   }
-  if (pos != str.size()) {
+  if(pos != str.size())
+  {
     throw IgorException(ERR_CONVERT, errorMsg);
   }
   return val;
 }
 
 template <>
-int64_t ParseString<int64_t>(const std::string &str,
-                             const std::string &errorMsg) {
-  size_t pos = 0;
+int64_t ParseString<int64_t>(const std::string &str, const std::string &errorMsg)
+{
+  size_t pos  = 0;
   int64_t val = 0;
-  try {
+  try
+  {
     val = std::stoll(str, &pos);
-  } catch (std::exception &) {
+  }
+  catch(std::exception &)
+  {
     throw IgorException(ERR_CONVERT, errorMsg);
   }
-  if (pos != str.size()) {
+  if(pos != str.size())
+  {
     throw IgorException(ERR_CONVERT, errorMsg);
   }
   return val;
 }
 
 template <>
-uint64_t ParseString<uint64_t>(const std::string &str,
-                               const std::string &errorMsg) {
-  size_t pos = 0;
+uint64_t ParseString<uint64_t>(const std::string &str, const std::string &errorMsg)
+{
+  size_t pos   = 0;
   uint64_t val = 0;
-  try {
+  try
+  {
     val = std::stoull(str, &pos);
-  } catch (std::exception &) {
+  }
+  catch(std::exception &)
+  {
     throw IgorException(ERR_CONVERT, errorMsg);
   }
-  if (pos != str.size()) {
+  if(pos != str.size())
+  {
     throw IgorException(ERR_CONVERT, errorMsg);
   }
   return val;
 }
 
 template <>
-int32_t ParseString<int32_t>(const std::string &str,
-                             const std::string &errorMsg) {
-  size_t pos = 0;
+int32_t ParseString<int32_t>(const std::string &str, const std::string &errorMsg)
+{
+  size_t pos  = 0;
   int32_t val = 0;
-  try {
+  try
+  {
     val = std::stoi(str, &pos);
-  } catch (std::exception &) {
+  }
+  catch(std::exception &)
+  {
     throw IgorException(ERR_CONVERT, errorMsg);
   }
-  if (pos != str.size()) {
+  if(pos != str.size())
+  {
     throw IgorException(ERR_CONVERT, errorMsg);
   }
   return val;
 }
 
 template <>
-uint32_t ParseString<uint32_t>(const std::string &str,
-                               const std::string &errorMsg) {
-  size_t pos = 0;
+uint32_t ParseString<uint32_t>(const std::string &str, const std::string &errorMsg)
+{
+  size_t pos   = 0;
   uint32_t val = 0;
-  try {
+  try
+  {
 #ifdef MACIGOR64
     uint64_t val_long = std::stoul(str, &pos);
 
-    if (val_long >
-        static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())) {
+    if(val_long > static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()))
+    {
       throw IgorException(ERR_CONVERT, errorMsg);
     }
 
@@ -203,10 +239,13 @@ uint32_t ParseString<uint32_t>(const std::string &str,
 #else
     val = std::stoul(str, &pos);
 #endif
-  } catch (std::exception &) {
+  }
+  catch(std::exception &)
+  {
     throw IgorException(ERR_CONVERT, errorMsg);
   }
-  if (pos != str.size()) {
+  if(pos != str.size())
+  {
     throw IgorException(ERR_CONVERT, errorMsg);
   }
   return val;
@@ -217,30 +256,34 @@ uint32_t ParseString<uint32_t>(const std::string &str,
 // MacOSX 64bit: size_t aka unsigned long aka unsigned long long (8 byte)
 // is different from the above types
 template <>
-size_t ParseString<size_t>(const std::string &str,
-                           const std::string &errorMsg) {
+size_t ParseString<size_t>(const std::string &str, const std::string &errorMsg)
+{
   static_assert(sizeof(size_t) == sizeof(uint64_t), "Unexpected size_t");
   return ParseString<uint64_t>(str, errorMsg);
 }
 
 #endif
 
-void CheckStructType(Handle structType, const std::string &requiredType,
-                     const std::string &errorMsg) {
-  if (requiredType != GetStringFromHandle(structType)) {
+void CheckStructType(Handle structType, const std::string &requiredType, const std::string &errorMsg)
+{
+  if(requiredType != GetStringFromHandle(structType))
+  {
     throw IgorException(EXPECT_COMPAT_STRUCT, errorMsg);
   }
 }
 
-void CheckStructVersion(double version, int requiredVersion,
-                        const std::string &errorMsg) {
-  if (requiredVersion != ConvertFromDouble<int>(version, errorMsg)) {
+void CheckStructVersion(double version, int requiredVersion, const std::string &errorMsg)
+{
+  if(requiredVersion != ConvertFromDouble<int>(version, errorMsg))
+  {
     throw IgorException(EXPECT_COMPAT_STRUCT, errorMsg);
   }
 }
 
-std::size_t GetWaveElementSize(int dataType) {
-  switch (dataType) {
+std::size_t GetWaveElementSize(int dataType)
+{
+  switch(dataType)
+  {
   /// size assumptions about real/double values are
   // not guaranteed by the standard but should work
   case NT_CMPLX | NT_FP32:
@@ -272,18 +315,23 @@ std::size_t GetWaveElementSize(int dataType) {
   }
 }
 
-void WaveClear(waveHndl wv) {
-  if (wv == nullptr) {
+void WaveClear(waveHndl wv)
+{
+  if(wv == nullptr)
+  {
     throw IgorException(USING_NULL_REFVAR);
   }
 
   int type = WaveType(wv);
-  if (type == TEXT_WAVE_TYPE) {
+  if(type == TEXT_WAVE_TYPE)
+  {
     ClearTextWave(wv);
-  } else {
+  }
+  else
+  {
     const auto numBytes = To<size_t>(WaveMemorySize(wv, 2));
 
-    if (numBytes == 0) // nothing to do
+    if(numBytes == 0) // nothing to do
     {
       return;
     }
@@ -292,37 +340,42 @@ void WaveClear(waveHndl wv) {
   }
 }
 
-void SetDimensionLabels(waveHndl h, int Dimension,
-                        const std::vector<std::string> &dimLabels) {
+void SetDimensionLabels(waveHndl h, int Dimension, const std::vector<std::string> &dimLabels)
+{
   // Check wave exists.
-  if (h == nullptr) {
+  if(h == nullptr)
+  {
     throw IgorException(NULL_WAVE_OP);
   }
 
-  for (size_t k = 0; k < dimLabels.size(); k++) {
-    if (dimLabels[k].empty()) {
+  for(size_t k = 0; k < dimLabels.size(); k++)
+  {
+    if(dimLabels[k].empty())
+    {
       // Empty string.  Skip.
       continue;
     }
 
-    if (int RetVal = MDSetDimensionLabel(h, Dimension, To<IndexInt>(k),
-                                         dimLabels[k].c_str())) {
+    if(int RetVal = MDSetDimensionLabel(h, Dimension, To<IndexInt>(k), dimLabels[k].c_str()))
+    {
       throw IgorException(RetVal);
     }
   }
 }
 
-void StringVectorToTextWave(const std::vector<std::string> &stringVector,
-                            waveHndl waveHandle) {
-  if (stringVector.empty()) {
+void StringVectorToTextWave(const std::vector<std::string> &stringVector, waveHndl waveHandle)
+{
+  if(stringVector.empty())
+  {
     return;
   }
 
-  if (!waveHandle) {
+  if(!waveHandle)
+  {
     throw IgorException(USING_NULL_REFVAR);
   }
 
-  size_t offset = 0;
+  size_t offset    = 0;
   size_t totalSize = 0;
 
   const size_t numEntriesPlusOne = stringVector.size() + 1;
@@ -330,7 +383,8 @@ void StringVectorToTextWave(const std::vector<std::string> &stringVector,
   std::vector<size_t> stringSizes;
   stringSizes.reserve(numEntriesPlusOne);
 
-  for (const auto &elem : stringVector) {
+  for(const auto &elem : stringVector)
+  {
     auto size = elem.size();
 
     stringSizes.push_back(size);
@@ -341,15 +395,18 @@ void StringVectorToTextWave(const std::vector<std::string> &stringVector,
 
   Handle textHandle = WMNewHandle(To<BCInt>(totalSize));
 
-  if (textHandle == nullptr) {
+  if(textHandle == nullptr)
+  {
     throw IgorException(NOMEM);
   }
 
-  for (size_t i = 0; i < numEntriesPlusOne; i++) {
-    if (i == 0) // position of the first string
+  for(size_t i = 0; i < numEntriesPlusOne; i++)
+  {
+    if(i == 0) // position of the first string
     {
       offset = numEntriesPlusOne * sizeof(size_t);
-    } else // and of all the others
+    }
+    else // and of all the others
     {
       offset += stringSizes[i - 1];
     }
@@ -357,10 +414,10 @@ void StringVectorToTextWave(const std::vector<std::string> &stringVector,
     // write offsets
     std::memcpy(*textHandle + i * sizeof(size_t), &offset, sizeof(size_t));
 
-    if (i < stringVector.size()) {
+    if(i < stringVector.size())
+    {
       // write strings
-      std::memcpy(*textHandle + offset, stringVector[i].c_str(),
-                  stringSizes[i]);
+      std::memcpy(*textHandle + offset, stringVector[i].c_str(), stringSizes[i]);
     }
   }
 
@@ -373,7 +430,8 @@ void StringVectorToTextWave(const std::vector<std::string> &stringVector,
   //...
   const int mode = 2;
 
-  if (int ret = SetTextWaveData(waveHandle, mode, textHandle)) {
+  if(int ret = SetTextWaveData(waveHandle, mode, textHandle))
+  {
     WMDisposeHandle(textHandle);
     throw IgorException(ret);
   }
@@ -383,31 +441,35 @@ void StringVectorToTextWave(const std::vector<std::string> &stringVector,
 
 // @brief Clears a text wave, sets all elements to zero sized strings. Works for
 // 32 and 64 bit
-void ClearTextWave(waveHndl w) {
+void ClearTextWave(waveHndl w)
+{
   Handle textH;
   size_t fullSize;
   int err;
   std::vector<CountInt> dims(MAX_DIMENSIONS + 1, 0);
   int numDims;
 
-  if (err = MDGetWaveDimensions(w, &numDims, dims.data())) {
+  if(err = MDGetWaveDimensions(w, &numDims, dims.data()))
+  {
     throw IgorException(err, "Error getting wave dimensions.");
   }
   dims.resize(To<size_t>(numDims));
 
   size_t size = 1;
-  for (auto &e : dims) {
+  for(auto &e : dims)
+  {
     size *= To<size_t>(e);
   }
 
-  if (!size) {
+  if(!size)
+  {
     return;
   }
 
   fullSize = sizeof(size_t) * (size + 1);
-  if (!(textH = WMNewHandle(To<BCInt>(fullSize)))) {
-    throw IgorException(ERR_CONVERT,
-                        "Error creating handle for text wave clear.");
+  if(!(textH = WMNewHandle(To<BCInt>(fullSize))))
+  {
+    throw IgorException(ERR_CONVERT, "Error creating handle for text wave clear.");
   }
 
   auto *textHS = reinterpret_cast<size_t *>(*textH); // NOLINT
@@ -416,7 +478,8 @@ void ClearTextWave(waveHndl w) {
   std::memset(textHS, 0, fullSize); // NOLINT
   // no data area
 
-  if (err = SetTextWaveData(w, 2, textH)) {
+  if(err = SetTextWaveData(w, 2, textH))
+  {
     WMDisposeHandle(textH);
     throw IgorException(err, "Error clearing text wave.");
   }
@@ -425,7 +488,8 @@ void ClearTextWave(waveHndl w) {
 
 // @brief sets all elements of a text wave to the string value. Works for 32 and
 // 64 bit
-void SetTextWave(waveHndl w, const std::string &value) {
+void SetTextWave(waveHndl w, const std::string &value)
+{
   Handle textH;
   size_t fullSize;
   size_t offsetSize;
@@ -434,31 +498,35 @@ void SetTextWave(waveHndl w, const std::string &value) {
   std::vector<CountInt> dims(MAX_DIMENSIONS + 1, 0);
   int numDims;
 
-  if (err = MDGetWaveDimensions(w, &numDims, dims.data())) {
+  if(err = MDGetWaveDimensions(w, &numDims, dims.data()))
+  {
     throw IgorException(err, "Error getting wave dimensions.");
   }
   dims.resize(To<size_t>(numDims));
 
   size_t size = 1;
-  for (auto &e : dims) {
+  for(auto &e : dims)
+  {
     size *= To<size_t>(e);
   }
 
-  if (!size) {
+  if(!size)
+  {
     return;
   }
 
   offsetSize = sizeof(size_t) * (size + 1);
-  fullSize = offsetSize + value.size() * size;
-  if (!(textH = WMNewHandle(To<BCInt>(fullSize)))) {
-    throw IgorException(ERR_CONVERT,
-                        "Error creating handle for set text wave.");
+  fullSize   = offsetSize + value.size() * size;
+  if(!(textH = WMNewHandle(To<BCInt>(fullSize))))
+  {
+    throw IgorException(ERR_CONVERT, "Error creating handle for set text wave.");
   }
 
   auto *textOffs = reinterpret_cast<size_t *>(*textH); // NOLINT
   // Fill offset area: offsets including the 'extra offset'
-  for (size_t pos = 0; pos < size; pos++) {
-    offset = pos * value.size();
+  for(size_t pos = 0; pos < size; pos++)
+  {
+    offset            = pos * value.size();
     *(textOffs + pos) = offset; // NOLINT
     std::memcpy(*textH + offsetSize + offset, value.c_str(),
                 value.size()); // NOLINT
@@ -466,161 +534,182 @@ void SetTextWave(waveHndl w, const std::string &value) {
   // set "extra offset"
   *(textOffs + size) = size * value.size(); // NOLINT
 
-  if (err = SetTextWaveData(w, 2, textH)) {
+  if(err = SetTextWaveData(w, 2, textH))
+  {
     WMDisposeHandle(textH);
     throw IgorException(err, "Error clearing text wave.");
   }
   WMDisposeHandle(textH);
 }
 
-void ASSERT(bool cond, const std::string &errorMsg) {
-  if (!cond) {
+void ASSERT(bool cond, const std::string &errorMsg)
+{
+  if(!cond)
+  {
     throw IgorException(ERR_ASSERT, errorMsg);
   }
 }
 
-std::string GetStackTrace() {
+std::string GetStackTrace()
+{
   Handle h = WMNewHandle(0);
 
-  if (int err = GetIgorRTStackInfo(3, &h)) {
+  if(int err = GetIgorRTStackInfo(3, &h))
+  {
     return "unknown stacktrace";
   }
 
   return GetStringFromHandleWithDispose(h);
 }
 
-void SetOperationReturn(const std::string &name, const std::string &value) {
-  if (int err = SetOperationStrVar(name.c_str(), value.c_str())) {
+void SetOperationReturn(const std::string &name, const std::string &value)
+{
+  if(int err = SetOperationStrVar(name.c_str(), value.c_str()))
+  {
     throw IgorException(err, "Error setting {}."_format(name));
   }
 }
 
-void SetOperationReturn(const std::string &name, double value) {
-  if (int err = SetOperationNumVar(name.c_str(), value)) {
+void SetOperationReturn(const std::string &name, double value)
+{
+  if(int err = SetOperationNumVar(name.c_str(), value))
+  {
     throw IgorException(err, "Error setting {}."_format(name));
   }
 }
 
-void HandleDestWave(int FlagParamsSet, const DataFolderAndName &dfAndName,
-                    const int freeFlagEncountered, std::vector<CountInt> dims,
-                    const std::function<void(waveHndl)> &checkWaveProperties,
+void HandleDestWave(int FlagParamsSet, const DataFolderAndName &dfAndName, const int freeFlagEncountered,
+                    std::vector<CountInt> dims, const std::function<void(waveHndl)> &checkWaveProperties,
                     const std::function<int(waveHndl)> &typeGetter,
-                    const std::function<void(waveHndl)> &setWaveContents) {
+                    const std::function<void(waveHndl)> &setWaveContents)
+{
   int err;
 
-  ASSERT(dims.size() == MAX_DIMENSIONS + 1,
-         "dims vector for HandleDestWave must have size MAX_DIMENSIONS + 1");
+  ASSERT(dims.size() == MAX_DIMENSIONS + 1, "dims vector for HandleDestWave must have size MAX_DIMENSIONS + 1");
 
   // Igor Pro wave handling code
-  waveHndl destWaveH = nullptr;
-  const int optExists = kOpDestWaveOverwriteOK | kOpDestWaveMustAlreadyExist;
-  const int optOverwrite =
-      kOpDestWaveOverwriteOK | kOpDestWaveOverwriteExistingWave;
-  const int optNewFree = kOpDestWaveMakeFreeWave;
-  int waveOptions = optOverwrite;
-  int type = TEXT_WAVE_TYPE;
+  waveHndl destWaveH     = nullptr;
+  const int optExists    = kOpDestWaveOverwriteOK | kOpDestWaveMustAlreadyExist;
+  const int optOverwrite = kOpDestWaveOverwriteOK | kOpDestWaveOverwriteExistingWave;
+  const int optNewFree   = kOpDestWaveMakeFreeWave;
+  int waveOptions        = optOverwrite;
+  int type               = TEXT_WAVE_TYPE;
 
-  if (freeFlagEncountered) {
+  if(freeFlagEncountered)
+  {
     waveOptions = optNewFree;
-  } else {
+  }
+  else
+  {
     // recover type of preexisting wave if it does
-    err = GetOperationDestWave(
-        dfAndName.dfH, static_cast<const char *>(dfAndName.name), FlagParamsSet,
-        optExists, dims.data(), type, &destWaveH, nullptr);
-    if (!((err == 0) || (err == NOWAV))) {
+    err = GetOperationDestWave(dfAndName.dfH, static_cast<const char *>(dfAndName.name), FlagParamsSet, optExists,
+                               dims.data(), type, &destWaveH, nullptr);
+    if(!((err == 0) || (err == NOWAV)))
+    {
       throw IgorException(err, "Error retrieving wave from operation.");
     }
-    if (err == 0) {
+    if(err == 0)
+    {
       checkWaveProperties(destWaveH);
     }
   }
   type = typeGetter(destWaveH);
 
   // change/create wave
-  if (err = GetOperationDestWave(
-          dfAndName.dfH, static_cast<const char *>(dfAndName.name),
-          FlagParamsSet, waveOptions, dims.data(), type, &destWaveH, nullptr)) {
+  if(err = GetOperationDestWave(dfAndName.dfH, static_cast<const char *>(dfAndName.name), FlagParamsSet, waveOptions,
+                                dims.data(), type, &destWaveH, nullptr))
+  {
     throw IgorException(err, "Error creating or changing wave.");
   }
 
   setWaveContents(destWaveH);
 
   WaveHandleModified(destWaveH);
-  if (FlagParamsSet) {
+  if(FlagParamsSet)
+  {
     SetOperationWaveRef(destWaveH, FlagParamsSet);
   }
 }
 
-std::vector<CountInt> GetWaveDimension(waveHndl w) {
+std::vector<CountInt> GetWaveDimension(waveHndl w)
+{
   int numDims;
   return GetWaveDimension(w, numDims);
 }
 
-std::vector<CountInt> GetWaveDimension(waveHndl w, int &numDims) {
-  if (!w) {
+std::vector<CountInt> GetWaveDimension(waveHndl w, int &numDims)
+{
+  if(!w)
+  {
     throw IgorException(NOWAV);
   }
   std::vector<CountInt> dims(MAX_DIMENSIONS + 1, 0);
-  if (int err = MDGetWaveDimensions(w, &numDims, dims.data())) {
+  if(int err = MDGetWaveDimensions(w, &numDims, dims.data()))
+  {
     throw IgorException(err, "Error retrieving wave dimension.");
   }
 
   return dims;
 }
 
-void CheckWaveDimension(waveHndl w, const std::vector<CountInt> &expectedDims,
-                        const std::string &errorMsg) {
+void CheckWaveDimension(waveHndl w, const std::vector<CountInt> &expectedDims, const std::string &errorMsg)
+{
   std::vector<CountInt> compDims(MAX_DIMENSIONS + 1, 0);
-  auto size = To<std::ptrdiff_t>(expectedDims.size() < compDims.size() - 1
-                                     ? expectedDims.size()
-                                     : compDims.size() - 1);
-  std::copy(expectedDims.begin(), expectedDims.begin() + size,
-            compDims.begin());
+  auto size = To<std::ptrdiff_t>(expectedDims.size() < compDims.size() - 1 ? expectedDims.size() : compDims.size() - 1);
+  std::copy(expectedDims.begin(), expectedDims.begin() + size, compDims.begin());
 
   std::vector<CountInt> dims = GetWaveDimension(w);
-  if (compDims != dims) {
+  if(compDims != dims)
+  {
     throw IgorException(ERR_INVALID_TYPE, errorMsg);
   }
 }
 
 template <>
-void SetWaveElement<std::string>(waveHndl w, std::vector<IndexInt> &dims,
-                                 const std::string &value) {
-  if (!w) {
+void SetWaveElement<std::string>(waveHndl w, std::vector<IndexInt> &dims, const std::string &value)
+{
+  if(!w)
+  {
     throw IgorException(NOWAV);
   }
 
-  ASSERT(dims.size() == MAX_DIMENSIONS,
-         "dims vector for SetWaveElement must have size MAX_DIMENSIONS");
+  ASSERT(dims.size() == MAX_DIMENSIONS, "dims vector for SetWaveElement must have size MAX_DIMENSIONS");
 
-  if (WaveType(w) == TEXT_WAVE_TYPE) {
+  if(WaveType(w) == TEXT_WAVE_TYPE)
+  {
     Handle textH = GetHandleFromString(value);
-    int err = MDSetTextWavePointValue(w, dims.data(), textH);
+    int err      = MDSetTextWavePointValue(w, dims.data(), textH);
     WMDisposeHandle(textH);
-    if (err) {
+    if(err)
+    {
       throw IgorException(err, "Error writing values to text wave");
     }
-  } else {
+  }
+  else
+  {
     throw IgorException(ERR_INVALID_TYPE, "Wave is not a text wave.");
   }
 }
 
 template <>
-std::string GetWaveElement<std::string>(waveHndl w,
-                                        std::vector<IndexInt> &dims) {
-  if (!w) {
+std::string GetWaveElement<std::string>(waveHndl w, std::vector<IndexInt> &dims)
+{
+  if(!w)
+  {
     throw IgorException(NOWAV);
   }
 
-  ASSERT(dims.size() == MAX_DIMENSIONS,
-         "dims vector for SetWaveElement must have size MAX_DIMENSIONS");
+  ASSERT(dims.size() == MAX_DIMENSIONS, "dims vector for SetWaveElement must have size MAX_DIMENSIONS");
 
-  if (WaveType(w) == TEXT_WAVE_TYPE) {
+  if(WaveType(w) == TEXT_WAVE_TYPE)
+  {
     Handle textH;
-    if (!(textH = WMNewHandle(0L))) {
+    if(!(textH = WMNewHandle(0L)))
+    {
       throw IgorException(NOMEM, "Error creating Igor Handle.");
     }
-    if (int err = MDGetTextWavePointValue(w, dims.data(), textH)) {
+    if(int err = MDGetTextWavePointValue(w, dims.data(), textH))
+    {
       WMDisposeHandle(textH);
       throw IgorException(err, "Error reading value from text wave");
     }
@@ -630,20 +719,21 @@ std::string GetWaveElement<std::string>(waveHndl w,
   throw IgorException(ERR_INVALID_TYPE, "XOP Bug: Wave is not a text wave.");
 }
 
-std::string ExecuteCommand(const std::string &cmd,
-                           OutputMode mode /* = OutputMode::Silent */) {
+std::string ExecuteCommand(const std::string &cmd, OutputMode mode /* = OutputMode::Silent */)
+{
   Handle text;
-  int err =
-      XOPCommand3(cmd.c_str(), mode == OutputMode::Silent ? 1 : 0, 0, &text);
+  int err = XOPCommand3(cmd.c_str(), mode == OutputMode::Silent ? 1 : 0, 0, &text);
 
-  if (err) {
+  if(err)
+  {
     throw IgorException(err, "Error executing the cmd {}"_format(cmd));
   }
 
   return GetStringFromHandleWithDispose(text);
 }
 
-StrStrMap GetVersionInfo(const std::string &xopName) {
+StrStrMap GetVersionInfo(const std::string &xopName)
+{
   ASSERT(!xopName.empty(), "GetVersionInfo: xopName can not be empty");
 
   std::map<std::string, std::string> m;
@@ -663,8 +753,7 @@ StrStrMap GetVersionInfo(const std::string &xopName) {
 #endif
 
 #ifdef MACIGOR64
-  m["compiler"] = "Clang {}.{}.{}"_format(__clang_major__, __clang_minor__,
-                                          __clang_patchlevel__);
+  m["compiler"] = "Clang {}.{}.{}"_format(__clang_major__, __clang_minor__, __clang_patchlevel__);
 #else
   m["compiler"] = "Visual Studio {}"_format(_MSC_VER);
 #endif

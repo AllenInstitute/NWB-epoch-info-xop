@@ -24,7 +24,7 @@ resource 'STR#' (1100) {					/* custom error messages */
   "A C++ exception occured.",                                                                          // CPP_EXCEPTION
 
   "ASSERTion encountered.",                                                                            // ERR_ASSERT
-  "Error when parsing input",                                                                          // ERR_PARSE
+  "Error when parsing HDF5 file",                                                                      // ERR_HDF5
   "Can not convert value to requested type.",                                                          // ERR_CONVERT
   "Invalid type specified.",                                                                           // ERR_INVALID_TYPE
   "Parameters missing in operation call",                                                              // ERR_FLAGPARAMS
@@ -43,10 +43,10 @@ resource 'XOPI' (1100) {
 
 resource 'XOPC' (1100) {
 	{
-	"MIESNWB2_WriteCompound",
+	"IPNWB_WriteCompound",
 	utilOp + XOPOp + compilableOp + threadSafeOp,
 
-	"MIESNWB2_ReadCompound",
+	"IPNWB_ReadCompound",
 	utilOp + XOPOp + compilableOp + threadSafeOp,
 
   }
