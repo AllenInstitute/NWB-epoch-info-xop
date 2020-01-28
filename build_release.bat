@@ -1,6 +1,8 @@
 @echo off
 cd /D %~dp0
-call build_hdf5.bat
+cd hdf5_package\CMake-hdf5-1.10.6
+7z x -y -o..\..\hdf5 HDF5-1.10.6-win64.zip *
+
 cd /D %~dp0
 md build
 cd build
