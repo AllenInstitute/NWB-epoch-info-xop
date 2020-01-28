@@ -48,7 +48,7 @@ static int RegisterIPNWB_WriteCompound(void)
   // NOTE: If you change this template, you must change the IPNWB_WriteCompoundRuntimeParams structure as well.
   cmdTemplate = "IPNWB_WriteCompound /Z[=number:ZIn] /Q[=number:QIn] /S=wave:offsetWave /C=wave:sizeWave "
                 "/REF=wave:tsRefWave /LOC=string:compPath string:fullFileName";
-  runtimeNumVarList = "";
+  runtimeNumVarList = "V_flag;";
   runtimeStrVarList = "";
   return RegisterOperation(cmdTemplate, runtimeNumVarList, runtimeStrVarList, sizeof(IPNWB_WriteCompoundRuntimeParams),
                            (void *) ExecuteIPNWB_WriteCompound, kOperationIsThreadSafe);
@@ -64,7 +64,7 @@ static int RegisterIPNWB_ReadCompound(void)
   cmdTemplate = "IPNWB_ReadCompound /Z[=number:ZIn] /Q[=number:QIn] /FREE /S=DataFolderAndName:{offsetWave, real} "
                 "/C=DataFolderAndName:{sizeWave, real} /REF=DataFolderAndName:{tsRefWave, text} /LOC=string:compPath "
                 "string:fullFileName";
-  runtimeNumVarList = "";
+  runtimeNumVarList = "V_flag;";
   runtimeStrVarList = "";
   return RegisterOperation(cmdTemplate, runtimeNumVarList, runtimeStrVarList, sizeof(IPNWB_ReadCompoundRuntimeParams),
                            (void *) ExecuteIPNWB_ReadCompound, kOperationIsThreadSafe);

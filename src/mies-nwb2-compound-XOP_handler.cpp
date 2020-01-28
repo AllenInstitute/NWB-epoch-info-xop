@@ -23,20 +23,12 @@ static const int MEMBERNAME_START_IDX     = 0;
 static const int MEMBERNAME_COUNT_IDX     = 1;
 static const int MEMBERNAME_REF_IDX       = 2;
 
-typedef struct dataPoint
+struct dataPoint
 {
   int offset;
   int size;
   hobj_ref_t ref;
-} dataPoint;
-
-void CheckCompoundMemberType(const H5::CompType &compType, const int index, const H5::PredType &predType)
-{
-  if(!(compType.getMemberDataType(index) == predType))
-  {
-    throw IgorException(ERR_INVALID_TYPE, "Referenced HDF5 compound member has wrong type.");
-  }
-}
+};
 
 } // namespace
 
@@ -126,7 +118,7 @@ void Handler::IPNWB_WriteCompound(IPNWB_WriteCompoundRuntimeParamsPtr p)
 
     H5::H5File file(fileName, H5F_ACC_RDWR);
 
-    auto compoundData = std::vector<dataPoint>(sizeWaveDims[0]);
+    std::vector<dataPoint> compoundData(sizeWaveDims[0]);
 
     std::vector<IndexInt> dimCnt(MAX_DIMENSIONS, 0);
     for(auto &dp : compoundData)
@@ -169,10 +161,8 @@ void Handler::IPNWB_WriteCompound(IPNWB_WriteCompoundRuntimeParamsPtr p)
 
       dataSet.write(compoundData.data(), compType);
     }
-
-    file.close();
   }
-  catch(H5::Exception ex)
+  catch(H5::Exception const &ex)
   {
     throw IgorException(ERR_HDF5, ex.getCDetailMsg());
   }
@@ -197,17 +187,17 @@ void Handler::IPNWB_ReadCompound(IPNWB_ReadCompoundRuntimeParamsPtr p)
     throw IgorException(ERR_INVALID_TYPE, "HDF5 data path missing.");
   }
 
-  auto niceRefs      = std::vector<std::string>();
-  auto offsets       = std::vector<int>();
-  auto sizes         = std::vector<int>();
-  hssize_t numPoints = 0;
+  auto niceRefs = std::vector<std::string>();
+  auto offsets  = std::vector<int>();
+  auto sizes    = std::vector<int>();
+  hssize_t numPoints;
+  size_t numDataPoints = 0;
 
   try
   {
     H5::H5File file(fileName, H5F_ACC_RDONLY);
     if(!file.exists(compPath))
     {
-      file.close();
       throw IgorException(ERR_INVALID_TYPE, "HDF5 data not present at given path.");
     }
     H5::DataSet dataSet = file.openDataSet(compPath);
@@ -223,6 +213,14 @@ void Handler::IPNWB_ReadCompound(IPNWB_ReadCompoundRuntimeParamsPtr p)
     {
       throw IgorException(ERR_INVALID_TYPE, "Referenced HDF5 compound has not {} members."_format(MEMBERNUMBER));
     }
+
+    auto CheckCompoundMemberType = [](const H5::CompType &compType, const int index, const H5::PredType &predType) {
+      if(!(compType.getMemberDataType(index) == predType))
+      {
+        throw IgorException(ERR_INVALID_TYPE, "Referenced HDF5 compound member has wrong type.");
+      }
+    };
+
     int memIndexStart = compType.getMemberIndex(MEMBERNAME_START);
     CheckCompoundMemberType(compType, memIndexStart, H5::PredType::STD_I32LE);
     int memIndexCount = compType.getMemberIndex(MEMBERNAME_COUNT);
@@ -235,30 +233,31 @@ void Handler::IPNWB_ReadCompound(IPNWB_ReadCompoundRuntimeParamsPtr p)
       throw IgorException(ERR_INVALID_TYPE, "Referenced HDF5 compound member has wrong element order.");
     }
 
-    numPoints         = dataSet.getSpace().getSelectNpoints();
-    auto compoundData = std::vector<dataPoint>(numPoints);
+    numPoints = dataSet.getSpace().getSelectNpoints();
+    if(numPoints > 0)
+    {
+      numDataPoints = static_cast<size_t>(numPoints);
+    }
+    std::vector<dataPoint> compoundData(numDataPoints);
     dataSet.read(compoundData.data(), compType);
 
     for(const auto &dp : compoundData)
     {
-      // dereferencing changes dset internally to a H5::Object, so we need a
-      // fresh one to reapply dereference
-      H5::DataSet dset = H5::DataSet();
-      dset.dereference(file, &dp.ref);
-      niceRefs.push_back(dset.getObjName());
+      // dereferencing changes dset internally to a H5::Object, which is opened and requires a separate close
+      auto dset = std::make_shared<H5::DataSet>(file, &dp.ref);
+      niceRefs.push_back(dset->getObjName());
       offsets.push_back(dp.offset);
       sizes.push_back(dp.size);
+      H5Oclose(dset->getId());
     }
-
-    file.close();
   }
-  catch(H5::Exception ex)
+  catch(H5::Exception const &ex)
   {
     throw IgorException(ERR_HDF5, ex.getCDetailMsg());
   }
 
   auto dimCnt = std::vector<CountInt>(MAX_DIMENSIONS + 1, 0);
-  dimCnt[0]   = numPoints;
+  dimCnt[0]   = numDataPoints;
   {
     auto checkWaveProperties = [](waveHndl w) {
       if(WaveType(w) != TEXT_WAVE_TYPE)
@@ -284,7 +283,7 @@ void Handler::IPNWB_ReadCompound(IPNWB_ReadCompoundRuntimeParamsPtr p)
 
     auto typeGetter = [](waveHndl /*unused*/) { return NT_I32; };
 
-    auto setWaveContents = [&](waveHndl w) { std::memcpy(WaveData(w), offsets.data(), numPoints * sizeof(int)); };
+    auto setWaveContents = [&](waveHndl w) { std::memcpy(WaveData(w), offsets.data(), offsets.size() * sizeof(int)); };
 
     HandleDestWave(p->SFlagParamsSet[0], p->offsetWave, p->FREEFlagEncountered, dimCnt, checkWaveProperties, typeGetter,
                    setWaveContents);
@@ -299,7 +298,7 @@ void Handler::IPNWB_ReadCompound(IPNWB_ReadCompoundRuntimeParamsPtr p)
 
     auto typeGetter = [](waveHndl /*unused*/) { return NT_I32; };
 
-    auto setWaveContents = [&](waveHndl w) { std::memcpy(WaveData(w), sizes.data(), numPoints * sizeof(int)); };
+    auto setWaveContents = [&](waveHndl w) { std::memcpy(WaveData(w), sizes.data(), sizes.size() * sizeof(int)); };
 
     HandleDestWave(p->CFlagParamsSet[0], p->sizeWave, p->FREEFlagEncountered, dimCnt, checkWaveProperties, typeGetter,
                    setWaveContents);
