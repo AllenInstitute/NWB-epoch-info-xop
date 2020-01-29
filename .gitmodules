@@ -10,3 +10,6 @@
 [submodule "xop_generator/fmt"]
 	path = xop_generator/fmt
 	url = https://github.com/fmtlib/fmt
+[submodule "utf"]
+	path = utf
+	url = https://github.com/byte-physics/igor-unit-testing-framework
