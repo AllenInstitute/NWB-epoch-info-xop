@@ -244,9 +244,7 @@ ADD_CUSTOM_TARGET(xop-stub
 
 FIND_PROGRAM(CLANG_FORMAT NAMES clang-format)
 
-IF(${CLANG_FORMAT-NOTFOUND})
-  MESSAGE(WARNING "Could not find clang-format.")
-ELSE()
+IF(CLANG_FORMAT)
   # run clang-format before building
   ADD_CUSTOM_COMMAND(TARGET ${libname}
                      PRE_BUILD
@@ -255,13 +253,11 @@ ELSE()
                      COMMENT "Running clang-format" VERBATIM)
 ENDIF()
 
-FIND_PROGRAM(CLANG-TIDY NAMES clang-tidy)
+FIND_PROGRAM(CLANG_TIDY NAMES clang-tidy)
 
-IF(${CLANG-TIDY-NOTFOUND})
-  MESSAGE(WARNING "Could not find clang-tidy.")
-ELSE()
+IF(CLANG_TIDY)
   ADD_CUSTOM_TARGET(clang-tidy
-                    COMMAND ${CLANG-TIDY} -fix -p=${CMAKE_BINARY_DIR} -checks=* ${SOURCES}
+                    COMMAND ${CLANG_TIDY} -fix -p=${CMAKE_BINARY_DIR} -checks=* ${SOURCES}
                     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
                     COMMENT "Running clang-tidy" VERBATIM)
 ENDIF()
