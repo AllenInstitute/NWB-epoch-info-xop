@@ -1,9 +1,0 @@
-extern "C" int Execute%%OPERATIONNAME%%(%%OPERATIONNAME%%RuntimeParamsPtr p)
-{
-  BEGIN_OUTER_CATCH
-
-  LockGuard lock(mutex);
-  XOPHandler().%%OPERATIONNAME%%(p);
-
-  END_OUTER_CATCH
-}

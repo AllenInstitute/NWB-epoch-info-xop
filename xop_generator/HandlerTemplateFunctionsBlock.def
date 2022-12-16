@@ -1,4 +1,0 @@
-void Handler::%%FUNCTIONNAME%%(%%FUNCTIONNAME%%Params *p)
-{
-  // p->result = 0;
-}

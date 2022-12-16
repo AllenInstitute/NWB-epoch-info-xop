@@ -1,7 +1,0 @@
-#if XOP_TOOLKIT_VERSION >= 800
-  "%%XOPNAME%% XOP requires Igor 8.00 or later.",                                                             // OLD_IGOR
-#else
-  "%%XOPNAME%% XOP requires Igor 7.00 or later.",                                                             // OLD_IGOR
-#endif
-  "A unhandled C++ exception occured.",                                                                // UNHANDLED_CPP_EXCEPTION
-  "A C++ exception occured.",                                                                          // CPP_EXCEPTION

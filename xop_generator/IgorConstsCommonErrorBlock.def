@@ -1,4 +1,0 @@
-// Error constants for %%XOPNAME%% XOP
-Constant %%XOPNAME%%_OLD_IGOR = 10001
-Constant %%XOPNAME%%_UNHANDLED_CPP_EXCEPTION = 10002
-Constant %%XOPNAME%%_CPP_EXCEPTION = 10003

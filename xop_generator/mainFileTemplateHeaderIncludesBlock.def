@@ -1,2 +1,0 @@
-#include "%%XOPNAME%%_xop.h"
-#include "%%XOPNAME%%_handler.h"
