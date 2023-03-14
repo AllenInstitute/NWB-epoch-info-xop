@@ -10,7 +10,7 @@ stages:
 
 build_release_x64:
   tags:
-    - windows, shell
+    - windows, shell, amd64
   stage: initial
   script:
     - 7z x -y -ohdf5 hdf5_package\CMake-hdf5-1.10.6\hdf5_x64_release.zip *
@@ -24,7 +24,7 @@ build_release_x64:
 
 build_release_x86:
   tags:
-    - windows, shell
+    - windows, shell, amd64
   stage: initial
   script:
     - 7z x -y -ohdf5 hdf5_package\CMake-hdf5-1.10.6\hdf5_x86_release.zip *
@@ -38,7 +38,7 @@ build_release_x86:
 
 testing_x64:
   tags:
-    - docker, debian
+    - docker, debian, amd64
   stage: second
   needs: ["build_release_x64"]
   variables:
@@ -70,7 +70,7 @@ testing_x64:
 
 testing_x86:
   tags:
-    - docker, debian
+    - docker, debian, amd64
   stage: second
   needs: ["build_release_x86"]
   variables:
